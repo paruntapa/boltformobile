@@ -1,4 +1,4 @@
-import type { PlopTypes } from "@turbo/gen";
+import type { PlopTypes } from "@turbo/gen/dist/types";
 
 // Learn more about Turborepo Generators at https://turbo.build/repo/docs/core-concepts/monorepos/code-generation
 
