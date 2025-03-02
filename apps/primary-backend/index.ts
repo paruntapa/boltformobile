@@ -1,13 +1,14 @@
 import { prisma } from "db/client";
 import express from "express";
 import cors from "cors";
+import { authMiddleware } from "./middleware";
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-app.get("/projects", async (req, res) => {
+app.post("/project", authMiddleware, async (req, res) => {
     const userId = req.userId;
     const { prompt } = req.body;
     const description = prompt.split("\n")[0];
@@ -18,12 +19,12 @@ app.get("/projects", async (req, res) => {
         },
     });
 
-    res.send(project);
+    res.send({projectId:  project.id});
 });
 
-app.get("/projects", async (req, res) => {
+app.get("/projects", authMiddleware, async (req, res) => {
     const userId = req.userId;
-    const project = await prisma.project.findUnique({
+    const project = await prisma.project.findFirst({
         where: {
             userId,
         },
