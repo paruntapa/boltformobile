@@ -23,16 +23,14 @@ app.post("/project", authMiddleware, async (req, res) => {
 });
 
 app.get("/projects", authMiddleware, async (req, res) => {
-    const userId = req.userId;
-    const project = await prisma.project.findFirst({
-        where: {
-            userId,
-        },
+    const userId = req.userId!;
+    const projects = await prisma.project.findMany({
+      where: { userId },
     });
+    res.json({ projects });
+  });
 
-    res.json(project);
-});
 
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
+app.listen(8080, () => {
+    console.log("Server is running on port 8080");
 });

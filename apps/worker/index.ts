@@ -1,10 +1,10 @@
 import cors from "cors";
 import express from "express";
-import { prismaClient } from "db/client";
+import { prisma } from "db/client";
 import Anthropic from '@anthropic-ai/sdk';
-import { systemPrompt } from "./systemPrompt";
 import { ArtifactProcessor } from "./parser";
 import { onFileUpdate, onPromptEnd, onPromptStart, onShellCommand } from "./os";
+import { systemPrompt } from "./systemPrompt";
 
 const app = express();
 app.use(cors());
@@ -13,7 +13,8 @@ app.use(express.json());
 app.post("/prompt", async (req, res) => {
   const { prompt, projectId } = req.body;
   const client = new Anthropic();
-  const project = await prismaClient.project.findUnique({
+
+  const project = await prisma.project.findUnique({
     where: {
       id: projectId,
     },
@@ -24,7 +25,7 @@ app.post("/prompt", async (req, res) => {
     return;
   }
 
-  const promptDb = await prismaClient.prompt.create({
+  const promptDb = await prisma.prompt.create({
     data: {
       content: prompt,
       projectId,
@@ -32,7 +33,7 @@ app.post("/prompt", async (req, res) => {
     },
   });
 
-  const allPrompts = await prismaClient.prompt.findMany({
+  const allPrompts = await prisma.prompt.findMany({
     where: {
       projectId,
     },
@@ -45,6 +46,7 @@ app.post("/prompt", async (req, res) => {
   let artifact = "";
 
   onPromptStart(promptDb.id);
+  
   let response = client.messages.stream({
     messages: allPrompts.map((p: any) => ({
       role: p.type === "USER" ? "user" : "assistant",
@@ -60,7 +62,7 @@ app.post("/prompt", async (req, res) => {
   })
   .on('finalMessage', async (message) => {
     console.log("done!");
-    await prismaClient.prompt.create({
+    await prisma.prompt.create({
       data: {
         content: artifact,
         projectId,
@@ -68,7 +70,7 @@ app.post("/prompt", async (req, res) => {
       },
     });
 
-    await prismaClient.action.create({
+    await prisma.action.create({
       data: {
         content: "Done!",
         projectId,

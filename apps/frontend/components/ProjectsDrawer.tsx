@@ -11,7 +11,7 @@ import {
   } from "@/components/ui/drawer"
 import { BACKEND_URL } from "@/config";
 import axios from "axios";
-// import { useAuth } from "@clerk/nextjs";
+import { SignedIn, useAuth, UserButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "./ui/input";
@@ -29,21 +29,26 @@ type Project = {
 
 function useProjects() {
     const router = useRouter();
-    // const { getToken } = useAuth();
+    const { getToken } = useAuth();
     const [projects, setProjects] = useState<{[date: string]: Project[]}>({});
     useEffect(() => {
         (async () => {
-            // const token = await getToken();
+            console.log("fetching projects")
+            const token = await getToken();
             const response = await axios.get(`${BACKEND_URL}/projects`, {
                 headers: {
-                    // "Authorization": `Bearer ${token}`
+                    Authorization: `Bearer ${token}`
                 }
             })
+            console.log(response.data.projects)
             const projectsByDate = response.data.projects.reduce((acc: {[date: string]: Project[]}, project: Project) => {
+
                 const date = new Date(project.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
                 if (!acc[date]) {
                     acc[date] = [];
                 }
+                
                 acc[date].push(project);
                 return acc;
             }, {});
@@ -113,8 +118,12 @@ export function ProjectsDrawer() {
                 ))}
             </DrawerHeader>
             <DrawerFooter>
-                <Button variant="ghost" className="w-full">
+                <Button variant="ghost" className="w-full cursor-pointer">
+                    <SignedIn>
+                     <UserButton />
+                    </SignedIn>
                     <LogOutIcon /> Logout
+                    
                 </Button>
             </DrawerFooter>
         </DrawerContent>

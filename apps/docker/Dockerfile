@@ -1,0 +1,37 @@
+FROM codercom/code-server:4.96.4
+
+USER root
+RUN apt-get update \
+    && apt-get install -y curl \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Revert to the code-server default user
+USER coder
+# Expose code-server's default port
+EXPOSE 8080
+
+# RUN git clone https://github.com/code100x/mobile-magic.git /tmp/bolty-worker
+# RUN cp -r /tmp/bolty-worker/expo-base-app /tmp/mobile-app
+# RUN cp -r /tmp/bolty-worker/nextjs-base-app /tmp/next-app
+# RUN cd /tmp/mobile-app && npm install
+# RUN cd /tmp/next-app && npm install
+# RUN cd /tmp
+
+# RUN wget https://github.com/code100x/mobile-magic/raw/refs/heads/main/ext/bolty-listener-0.0.1.vsix
+# RUN code-server --install-extension bolty-listener-0.0.1.vsix
+
+# RUN sudo chown -R coder /tmp/bolty-worker
+# RUN sudo chown -R coder /tmp/mobile-app
+# RUN sudo chown -R coder /tmp/next-app
+
+# RUN rm -rf /tmp/bolty-worker
+
+# # Set default theme to dark
+# RUN mkdir -p /home/coder/.local/share/code-server/User
+# RUN echo '{"workbench.colorTheme": "Dark+", "workbench.preferredDarkColorTheme": "Dark+"}' > /home/coder/.local/share/code-server/User/settings.json
+
+# Start code-server on container launch
+CMD ["code-server", "--auth", "none", "--bind-addr", "0.0.0.0:8080", "--disable-telemetry", "/tmp/semibolt-worker"]
