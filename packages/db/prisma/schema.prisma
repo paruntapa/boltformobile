@@ -28,14 +28,37 @@ model Project {
   updatedAt        DateTime @updatedAt 
   prompt           Prompt[]
   userId           String
+  actions           Action[]
+}
+
+model Action {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  project   Project  @relation(fields: [projectId], references: [id])
+  content   String
+  promptId  String
+  projectId String
+  prompt    Prompt   @relation(fields: [promptId], references: [id])
 }
 
 model Prompt {
   id        String   @id @default(uuid())
-  projectId String   
-  prompt    String
-  createdAt DateTime @default(now())  
+  content   String
+  type      PromptType
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId String
+  actions    Action[]
+}
 
-  project   Project @relation(fields: [projectId], references: [id])
+enum ProjectType {
+  REACT_NATIVE
+  NEXTJS
+}
+
+enum PromptType {
+  USER
+  SYSTEM
 }
