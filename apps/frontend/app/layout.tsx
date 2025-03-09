@@ -47,7 +47,7 @@ export default function RootLayout({
 						disableTransitionOnChange
 					>
 
-						<SidebarProvider defaultOpen={false} className="relative">
+						<SidebarProvider defaultOpen={false} className="relative rounded-full">
 							<AppSidebar />
 							{children}
 						</SidebarProvider>

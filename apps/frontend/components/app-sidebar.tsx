@@ -65,7 +65,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const projects = useProjects();
 
   return (
-    <Sidebar {...props}>
+    <Sidebar {...props} className="rounded-full bg-amber-700">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

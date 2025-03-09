@@ -28,7 +28,7 @@ export const Project: React.FC<{ projectId: string }> = ({ projectId }) => {
         axios.post(
             `${WORKER_API_URL}/prompt`,
             {
-                projectId: projectId,
+                projectId: projectId,   
                 prompt: prompt,
             },
             {
@@ -53,8 +53,8 @@ export const Project: React.FC<{ projectId: string }> = ({ projectId }) => {
                         <div className="flex-1 min-h-0 overflow-y-auto">
                             <div className="flex flex-col space-y-4 justify-center">
                                 {/* we are filtering only user prompts and rendering it */}
-                                {prompts.filter((prompt) => prompt.type === "USER").map((prompt) => (
-                                    <div>
+                                {prompts.filter((prompt) => prompt.type === "USER").map((prompt, idx) => (
+                                    <div key={idx}>
                                         <span key={prompt.id} className="flex text-lg gap-2">
                                             <Image src={user?.imageUrl || ""} width={10} height={10} alt="Profile picture" className="rounded-full w-6 h-6" />
                                             {prompt.content}
@@ -99,8 +99,8 @@ export const Project: React.FC<{ projectId: string }> = ({ projectId }) => {
                 <div className="flex-1 min-w-0 overflow-hidden p-4">
                     <div className="flex items-center justify-end gap-2 pb-2">
                         <Button variant={tab === "code" ? "default" : "outline"} onClick={() => setTab("code")}>Code</Button>
-                        <Button variant={tab === "preview" ? "default" : "outline"} onClick={() => setTab("preview")}>Preview</Button>
-                        <Button variant="outline" onClick={() => setTab("split")}>Split</Button>
+                        <Button variant={tab === "preview" ? "default" : "outline"} onClick={() => tab !== "preview" ? setTab("preview") : setTab("code")}>Preview</Button>
+                        <Button variant="outline" onClick={() => tab !== "split" ? setTab("split") : setTab("code")}>Split</Button>
                     </div>
                         <div className="flex gap-2 h-full">
                             <div className={`${tab === "code" ? "left-0 flex-1" : tab === "split" ? "left-0 flex-1" : "left-full flex-0"} position-absolute transition-all duration-300 h-full w-full`}>
