@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { BACKEND_URL, WORKER_API_URL } from "@/config";
 import { useRouter } from "next/navigation";
+
 export function Prompt() {
   const [prompt, setPrompt] = useState("");
   const { getToken } = useAuth();
