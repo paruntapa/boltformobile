@@ -1,28 +1,26 @@
-import { Appbar } from "@/components/Appbar";
-import { ProjectsDrawer } from "@/components/ProjectsDrawer";
 import { Prompt } from "@/components/Prompt";
-import { TemplateButtons } from "@/components/TemplateButtons ";
-import { Button } from "@/components/ui/button";
+import { Appbar } from "@/components/Appbar";
+import { SidebarInset } from "@/components/ui/sidebar";
+import { Hero } from "@/components/Hero";
 
 export default function Home() {
   return (
-    <div className="p-4">
-      <Appbar />
-      <ProjectsDrawer />
-      <div className="max-w-2xl mx-auto pt-32">
-        <div className="text-2xl font-bold text-center">
-          What do you want to build?
-        </div>
-        <div className="text-sm text-muted-foreground text-center p-2">
-          Prompt, click generate and watch your app come to life
-        </div>
-        <div className="pt-4">
-          <Prompt />
+    <SidebarInset className="bg-transparent">
+      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="space-y-4 px-4">
+          <div className="space-y-4">
+            <Appbar />
+
+            <div className="max-w-2xl mx-auto pt-32">
+    	      <Hero />
+
+              <div className="pt-4">
+                <Prompt />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="max-w-2xl mx-auto pt-4">
-        <TemplateButtons />
-      </div>
-    </div>
+    </SidebarInset>
   );
 }

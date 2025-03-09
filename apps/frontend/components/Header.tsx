@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'motion/react'
 import { itemVariants } from '@/lib/animation-variants'
+import { motion } from 'framer-motion'
 
 export const Header = ({ children, className, onClick }: {
 	children?: React.ReactNode,
@@ -18,7 +18,7 @@ export const Header = ({ children, className, onClick }: {
 				className="[&_svg:not([class*='size-'])]:size-5 cursor-pointer"
 			/>
 			<Link href="/">
-			   <Image src="/logo.svg" alt="logo" width={25} height={25} />
+			   {/* <Image src="/logo.svg" alt="logo" width={25} height={25} /> */}
 			</Link>
 			{children && <Button
 				variant="link"
